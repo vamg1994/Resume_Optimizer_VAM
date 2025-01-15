@@ -1,2 +1,11 @@
 # Streamlit
 .streamlit
+
+# Environment variables
+.env
+
+#pycache
+__pycache__
+
+#harvard template
+2024-template_bullet harvard template.docx

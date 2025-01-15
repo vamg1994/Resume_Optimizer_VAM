@@ -13,6 +13,9 @@ load_dotenv()
 # Initialize AssistantManager
 @st.cache_resource
 def get_assistant():
+    if not os.getenv("OPENAI_API_KEY"):
+        st.error("OpenAI API key not found in environment variables")
+        return None
     return AssistantManager()
 
 # Page configuration

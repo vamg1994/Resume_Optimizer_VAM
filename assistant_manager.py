@@ -9,9 +9,9 @@ import streamlit as st
 class AssistantManager:
 
     def __init__(self):
-        self.client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+        self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         try:
-            self.assistant = self.client.beta.assistants.retrieve(st.secrets["agent_id"])
+            self.assistant = self.client.beta.assistants.retrieve(os.getenv("agent_id"))
         except Exception as e:
             raise Exception(f"Failed to retrieve assistant: {str(e)}")
 
