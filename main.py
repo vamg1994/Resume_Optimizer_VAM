@@ -295,7 +295,7 @@ COVER LETTER
             
             # Create download section
             st.subheader("Download Options")
-            col1, col2 = st.columns(2)
+            col1, col2, col3 = st.columns(3)
             
             with col1:
                 st.download_button(
@@ -312,6 +312,37 @@ COVER LETTER
                     file_name="ats_resume_package.md",
                     mime="text/markdown",
                     use_container_width=True)
+            
+            # PDF download button
+            with col3:
+                if st.button("📑 Generate PDF Resume"):
+                    try:
+                        from exportingcvpdf import generate_resume_pdf
+                        
+                        # Generate PDF
+                        success = generate_resume_pdf(
+                            response['structured_cv'],
+                            'resume.pdf'
+                        )
+                        
+                        if success:
+                            # Read the generated PDF
+                            with open('resume.pdf', 'rb') as pdf_file:
+                                pdf_bytes = pdf_file.read()
+                            
+                            # Create download button
+                            st.download_button(
+                                label="📥 Download PDF Resume",
+                                data=pdf_bytes,
+                                file_name="resume.pdf",
+                                mime="application/pdf",
+                                use_container_width=True
+                            )
+                            st.success("PDF Resume generated successfully!")
+                        else:
+                            st.error("Failed to generate PDF Resume")
+                    except Exception as e:
+                        st.error(f"Error generating PDF: {str(e)}")
 
 def format_cv_from_structure(structured_cv):
     """Helper function to format CV text from structured data"""

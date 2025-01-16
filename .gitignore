@@ -9,3 +9,10 @@ __pycache__
 
 #harvard template
 2024-template_bullet harvard template.docx
+
+#testing files
+test_streamlit.py
+exportingcvpdf.py
+
+#pdf files
+*.pdf
