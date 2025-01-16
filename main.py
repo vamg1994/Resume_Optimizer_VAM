@@ -348,12 +348,10 @@ COVER LETTER
                     try:
                         from exportingcvpdf import generate_resume_pdf
                         
-                        # Generate PDF with custom configurations
+                        # Generate PDF without custom configurations for now
                         success = generate_resume_pdf(
                             response['structured_cv'],
-                            'resume.pdf',
-                            font_config=font_config,
-                            spacing_config=spacing_config
+                            'resume.pdf'
                         )
                         
                         if success:

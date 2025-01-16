@@ -10,7 +10,7 @@ class ResumePDF(FPDF):
 
     def add_header(self, name,spacing=3.5):
         """Add name as header"""
-        self.set_font('Helvetica', 'B', 14)
+        self.set_font('Times', 'B', 14)
         self.cell(0, spacing, name, ln=True, align='C')
         self.ln(5)
 
@@ -27,14 +27,14 @@ class ResumePDF(FPDF):
 
     def add_section_header(self, title,spacing=3.5):
         """Add section header with line"""
-        self.set_font('Helvetica', 'B', 10)
+        self.set_font('Times', 'B', 10)
         self.cell(0, spacing, title, ln=True)
         self.line(15, self.get_y(), 195, self.get_y())
         self.ln(5)
 
     def add_professional_summary(self, summary,spacing=3.5):
         """Add professional summary section"""
-        self.set_font('Helvetica', '', 10)
+        self.set_font('Times', '', 10)
         wrapped_text = textwrap.fill(summary, width=95)
         for line in wrapped_text.split('\n'):
             self.cell(0, spacing, line, ln=True)
@@ -44,15 +44,15 @@ class ResumePDF(FPDF):
         """Add work experience section"""
         for job in experience:
             # Job title and company
-            self.set_font('Helvetica', 'B', 10)
+            self.set_font('Times', 'B', 10)
             self.cell(0, spacing, f"{job['title']}", ln=True)
             
             # Company and dates
-            self.set_font('Helvetica', '', 10)
+            self.set_font('Times', '', 10)
             self.cell(0, spacing, f"{job['company']} | {job['dates']}", ln=True)
             
             # Responsibilities
-            self.set_font('Helvetica', '', 10)
+            self.set_font('Times', '', 10)
             for resp in job['responsibilities']:
                 # Add dash instead of bullet point and indent
                 self.cell(5, spacing, '-', ln=0)
@@ -70,13 +70,13 @@ class ResumePDF(FPDF):
     def add_education(self, education,spacing=3.5):
         """Add education section"""
         for edu in education:
-            self.set_font('Helvetica', 'B', 10)
+            self.set_font('Times', 'B', 10)
             self.cell(0, spacing, f"{edu['degree']}", ln=True)
             
-            self.set_font('Helvetica', '', 10)
+            self.set_font('Times', '', 10)
             self.cell(0, spacing, f"{edu['institution']} | {edu['dates']}", ln=True)
             
-            self.set_font('Helvetica', '', 10)
+            self.set_font('Times', '', 10)
             for detail in edu['details']:
                 self.cell(5, spacing, '-', ln=0)  # Changed bullet to dash
                 self.cell(0, spacing, detail, ln=True)
@@ -85,10 +85,10 @@ class ResumePDF(FPDF):
     def add_skills(self, skills,spacing=3.5):
         """Add skills section"""
         for category, skill_list in skills.items():
-            self.set_font('Helvetica', 'B', 10)
+            self.set_font('Times', 'B', 10)
             self.cell(0, spacing, category, ln=True)
             
-            self.set_font('Helvetica', '', 8)
+            self.set_font('Times', '', 8)
             # Create a wrapped list of skills
             skills_text = ', '.join(skill_list)
             wrapped_skills = textwrap.fill(skills_text, width=95)
@@ -96,11 +96,10 @@ class ResumePDF(FPDF):
                 self.cell(0, spacing, line, ln=True)
             self.ln(3)
 
-def generate_resume_pdf(structured_cv, output_path='resume.pdf', font_config=None, spacing_config=None):
-    """Generate PDF resume from structured CV data with custom configurations"""
+def generate_resume_pdf(structured_cv, output_path='resume.pdf'):
+    """Generate PDF resume from structured CV data"""
     try:
-        # Initialize PDF with configurations
-        pdf = ResumePDF(font_config=font_config, spacing_config=spacing_config)
+        pdf = ResumePDF()
         
         # Add content sections
         pdf.add_header(structured_cv['name'])
