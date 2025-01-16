@@ -313,24 +313,53 @@ COVER LETTER
                     mime="text/markdown",
                     use_container_width=True)
             
-            # PDF download button
+            # PDF download section
             with col3:
+                with st.expander("PDF Settings", expanded=False):
+                    st.subheader("Font Sizes")
+                    font_config = {
+                        'header': {
+                            'size': st.number_input('Header Font Size', 12, 36, 24),
+                            'style': 'B'
+                        },
+                        'contact': {
+                            'size': st.number_input('Contact Info Font Size', 8, 14, 10),
+                            'style': ''
+                        },
+                        'section_header': {
+                            'size': st.number_input('Section Headers Font Size', 10, 18, 14),
+                            'style': 'B'
+                        },
+                        'summary': {
+                            'size': st.number_input('Summary Font Size', 8, 14, 11),
+                            'style': ''
+                        }
+                    }
+                    
+                    st.subheader("Spacing")
+                    spacing_config = {
+                        'header': st.number_input('Header Spacing', 5, 20, 10),
+                        'contact': st.number_input('Contact Info Spacing', 3, 10, 5),
+                        'section_header': st.number_input('Section Header Spacing', 5, 15, 10),
+                        'section_gap': st.number_input('Section Gap', 3, 10, 5)
+                    }
+
                 if st.button("📑 Generate PDF Resume"):
                     try:
                         from exportingcvpdf import generate_resume_pdf
                         
-                        # Generate PDF
+                        # Generate PDF with custom configurations
                         success = generate_resume_pdf(
                             response['structured_cv'],
-                            'resume.pdf'
+                            'resume.pdf',
+                            font_config=font_config,
+                            spacing_config=spacing_config
                         )
                         
                         if success:
-                            # Read the generated PDF
                             with open('resume.pdf', 'rb') as pdf_file:
                                 pdf_bytes = pdf_file.read()
                             
-                            # Create download button
                             st.download_button(
                                 label="📥 Download PDF Resume",
                                 data=pdf_bytes,

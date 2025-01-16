@@ -2,7 +2,7 @@ from fpdf import FPDF
 import textwrap
 
 class ResumePDF(FPDF):
-    def __init__(self):
+    def __init__(self, font_config=None, spacing_config=None):
         super().__init__()
         self.set_auto_page_break(auto=True, margin=15)
         self.add_page()
@@ -14,7 +14,7 @@ class ResumePDF(FPDF):
         self.cell(0, spacing, name, ln=True, align='C')
         self.ln(5)
 
-    def add_contact_info(self, contact_info,spacing=3.5):
+    def add_contact_info(self, contact_info):
         """Add contact information section"""
         self.set_font('Times', '', 10)
         # Join all contact info with ' | ' separator
@@ -22,7 +22,7 @@ class ResumePDF(FPDF):
         # Wrap the contact line if it's too long
         wrapped_contact = textwrap.fill(contact_line, width=120)
         for line in wrapped_contact.split('\n'):
-            self.cell(0, spacing, line, ln=True, align='C')
+            self.cell(0, 5, line, ln=True, align='C')
         self.ln(5)
 
     def add_section_header(self, title,spacing=3.5):
@@ -96,10 +96,11 @@ class ResumePDF(FPDF):
                 self.cell(0, spacing, line, ln=True)
             self.ln(3)
 
-def generate_resume_pdf(structured_cv, output_path='resume.pdf'):
-    """Generate PDF resume from structured CV data"""
+def generate_resume_pdf(structured_cv, output_path='resume.pdf', font_config=None, spacing_config=None):
+    """Generate PDF resume from structured CV data with custom configurations"""
     try:
-        pdf = ResumePDF()
+        # Initialize PDF with configurations
+        pdf = ResumePDF(font_config=font_config, spacing_config=spacing_config)
         
         # Add content sections
         pdf.add_header(structured_cv['name'])
