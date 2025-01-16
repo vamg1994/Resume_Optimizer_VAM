@@ -96,9 +96,10 @@ class ResumePDF(FPDF):
                 self.cell(0, spacing, line, ln=True)
             self.ln(3)
 
-def generate_resume_pdf(structured_cv, output_path='resume.pdf'):
-    """Generate PDF resume from structured CV data"""
+def generate_resume_pdf(structured_cv, output_path='resume.pdf', font_config=None, spacing_config=None):
+    """Generate PDF resume from structured CV data with custom configurations"""
     try:
+        # Initialize PDF with configurations
         pdf = ResumePDF()
         
         # Add content sections

@@ -400,11 +400,11 @@ COVER LETTER
             
             # Create download section
             st.subheader("Download Options")
-            col1, col2, col3 = st.columns(3)
+            col1, col2, col3, col4 = st.columns(4)
             
             with col1:
                 st.download_button(
-                    "📄 Download as Text File",
+                    "📄 Download as Text",
                     combined_text,
                     file_name="ats_resume_package.txt",
                     mime="text/plain",
@@ -418,9 +418,8 @@ COVER LETTER
                     mime="text/markdown",
                     use_container_width=True)
             
-            # PDF download section
             with col3:
-                with st.expander("PDF Settings", expanded=False):
+                with st.expander("📑 PDF Settings"):
                     st.subheader("Font Sizes")
                     font_config = {
                         'header': {
@@ -449,14 +448,14 @@ COVER LETTER
                         'section_gap': st.number_input('Section Gap', 3, 10, 5)
                     }
 
-                if st.button("📑 Generate PDF Resume"):
+                if st.button("Generate PDF Resume", use_container_width=True):
                     try:
-                        from exportingcvpdf import generate_resume_pdf
-                        
-                        # Generate PDF without custom configurations for now
+                        from export_pdf import generate_resume_pdf
                         success = generate_resume_pdf(
                             response['structured_cv'],
-                            'resume.pdf'
+                            'resume.pdf',
+                            font_config=font_config,
+                            spacing_config=spacing_config
                         )
                         
                         if success:
@@ -464,7 +463,7 @@ COVER LETTER
                                 pdf_bytes = pdf_file.read()
                             
                             st.download_button(
-                                label="📥 Download PDF Resume",
+                                label="📥 Download PDF",
                                 data=pdf_bytes,
                                 file_name="resume.pdf",
                                 mime="application/pdf",
@@ -475,6 +474,45 @@ COVER LETTER
                             st.error("Failed to generate PDF Resume")
                     except Exception as e:
                         st.error(f"Error generating PDF: {str(e)}")
+
+            with col4:
+                with st.expander("📘 DOCX Settings"):
+                    st.subheader("Font Sizes")
+                    docx_config = {
+                        'name_size': st.number_input('Name Size', 12, 36, 24),
+                        'contact_size': st.number_input('Contact Size', 8, 14, 10),
+                        'heading_size': st.number_input('Heading Size', 10, 18, 14),
+                        'title_size': st.number_input('Job Title Size', 10, 16, 12),
+                        'body_size': st.number_input('Body Text Size', 8, 14, 11),
+                        'margins': st.number_input('Margins (inches)', 0.3, 2.0, 0.5, step=0.1),
+                        'line_spacing': st.number_input('Line Spacing', 1.0, 2.0, 1.15, step=0.05)
+                    }
+
+                if st.button("Generate DOCX Resume", use_container_width=True):
+                    try:
+                        from export_docx import generate_resume_docx
+                        success = generate_resume_docx(
+                            response['structured_cv'],
+                            'resume.docx',
+                            config=docx_config
+                        )
+                        
+                        if success:
+                            with open('resume.docx', 'rb') as docx_file:
+                                docx_bytes = docx_file.read()
+                            
+                            st.download_button(
+                                label="📥 Download DOCX",
+                                data=docx_bytes,
+                                file_name="resume.docx",
+                                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                                use_container_width=True
+                            )
+                            st.success("DOCX Resume generated successfully!")
+                        else:
+                            st.error("Failed to generate DOCX Resume")
+                    except Exception as e:
+                        st.error(f"Error generating DOCX: {str(e)}")
 
 def format_cv_from_structure(structured_cv):
     """Helper function to format CV text from structured data"""
