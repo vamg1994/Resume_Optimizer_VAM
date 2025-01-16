@@ -139,70 +139,133 @@ def main():
                 st.success("Analysis has been updated!")
 
         with tab2:
-            st.markdown("### ATS-Optimized CV")
+            st.title("📄 ATS-Optimized CV")
             
-            # Create expandable cards for each section
-            with st.expander("Personal Information", expanded=True):
+            # Personal Information Section
+            with st.expander("👤 Personal Information", expanded=True):
+                st.markdown("---")
                 col1, col2 = st.columns(2)
                 with col1:
-                    # Update name in structured data
                     response['structured_cv']['name'] = st.text_input(
-                        "Name", 
-                        response['structured_cv']['name']
+                        "🏷️ Name", 
+                        response['structured_cv']['name'],
+                        help="Enter your full name"
                     )
                 with col2:
-                    # Update contact info in structured data
                     contact_text = st.text_area(
-                        "Contact Information", 
-                        "\n".join(response['structured_cv']['contact'])
+                        "📞 Contact Information", 
+                        "\n".join(response['structured_cv']['contact']),
+                        help="Enter one contact detail per line"
                     )
                     response['structured_cv']['contact'] = [
                         line.strip() for line in contact_text.split('\n') 
                         if line.strip()
                     ]
             
-            with st.expander("Professional Summary", expanded=True):
-                # Update professional summary in structured data
+            # Professional Summary Section
+            with st.expander("📋 Professional Summary", expanded=True):
+                st.markdown("---")
                 response['structured_cv']['professional_summary'] = st.text_area(
-                    "Summary", 
+                    "💼 Career Overview", 
                     response['structured_cv']['professional_summary'],
-                    height=150
+                    height=150,
+                    help="Write a compelling summary of your professional background"
                 )
             
-            with st.expander("Work Experience", expanded=True):
+            # Work Experience Section
+            with st.expander("💼 Work Experience", expanded=True):
+                st.markdown("---")
+                col1, col2 = st.columns([5,1])
+                with col1:
+                    st.subheader("Work History")
+                with col2:
+                    if st.button("➕ Add Position", type="secondary"):
+                        response['structured_cv']['work_experience'].append({
+                            'title': 'New Position',
+                            'company': 'Company Name',
+                            'dates': 'Start Date - End Date',
+                            'responsibilities': ['Add your responsibilities']
+                        })
+                        st.success("✅ New position added!")
+                        st.rerun()
+
                 for idx, job in enumerate(response['structured_cv']['work_experience']):
-                    st.subheader(f"Position {idx + 1}")
-                    col1, col2 = st.columns(2)
-                    with col1:
-                        job['title'] = st.text_input(f"Title {idx}", job['title'])
-                        job['company'] = st.text_input(f"Company {idx}", job['company'])
-                    with col2:
-                        job['dates'] = st.text_input(f"Dates {idx}", job['dates'])
+                    st.markdown(f"### Position {idx + 1}")
+                    col1, col2, col3 = st.columns([4, 4, 1])
                     
-                    # Make responsibilities editable
-                    st.markdown("**Responsibilities:**")
-                    updated_resp = []
-                    for resp_idx, resp in enumerate(job['responsibilities']):
-                        new_resp = st.text_area(
-                            f"Responsibility {resp_idx + 1}",
-                            resp,
-                            height=100,
-                            key=f"resp_{idx}_{resp_idx}"
-                        )
-                        updated_resp.append(new_resp)
-                    job['responsibilities'] = updated_resp
-                    st.divider()
-            
-            with st.expander("Education", expanded=True):
-                for idx, edu in enumerate(response['structured_cv']['education']):
-                    st.subheader(f"Education {idx + 1}")
-                    col1, col2 = st.columns(2)
                     with col1:
-                        edu['degree'] = st.text_input(f"Degree {idx}", edu['degree'])
-                        edu['institution'] = st.text_input(f"Institution {idx}", 
-                                                        edu['institution'])
+                        job['title'] = st.text_input(
+                            "🏢 Job Title",
+                            job['title'],
+                            key=f"title_{idx}"
+                        )
+                        job['company'] = st.text_input(
+                            "🏪 Company",
+                            job['company'],
+                            key=f"company_{idx}"
+                        )
+                    
                     with col2:
-                        edu['dates'] = st.text_input(f"Dates {idx}", edu['dates'])
+                        job['dates'] = st.text_input(
+                            "📅 Employment Period",
+                            job['dates'],
+                            key=f"dates_{idx}"
+                        )
+                    
+                    with col3:
+                        st.markdown("#")  # Spacing
+                        if st.button("🗑️", key=f"del_exp_{idx}", help="Delete this position"):
+                            response['structured_cv']['work_experience'].pop(idx)
+                            st.success("🗑️ Position removed!")
+                            st.rerun()
+                    
+                    st.markdown("#### Key Responsibilities:")
+                    for resp_idx, resp in enumerate(job['responsibilities']):
+                        col1, col2 = st.columns([8, 1])
+                        with col1:
+                            new_resp = st.text_area(
+                                f"📝 Responsibility {resp_idx + 1}",
+                                resp,
+                                height=100,
+                                key=f"resp_{idx}_{resp_idx}"
+                            )
+                            job['responsibilities'][resp_idx] = new_resp
+                        with col2:
+                            st.markdown("#")  # Spacing
+                            if st.button("➕", key=f"add_resp_{idx}_{resp_idx}"):
+                                job['responsibilities'].insert(resp_idx + 1, "New responsibility")
+                                st.rerun()
+                            if st.button("🗑️", key=f"del_resp_{idx}_{resp_idx}"):
+                                job['responsibilities'].pop(resp_idx)
+                                st.rerun()
+                    st.markdown("---")
+            
+            # Education Section
+            with st.expander("🎓 Education", expanded=True):
+                st.markdown("---")
+                col1, col2 = st.columns([3,1])
+                with col1:
+                    st.subheader("Academic Background")
+                with col2:
+                    if st.button("➕ Add Education", type="secondary"):
+                        response['structured_cv']['education'].append({
+                            'degree': 'New Degree',
+                            'institution': 'Institution Name',
+                            'dates': 'Start Date - End Date',
+                            'details': ['Add education details']
+                        })
+                        st.success("✅ New education entry added!")
+                        st.rerun()
+
+                for idx, edu in enumerate(response['structured_cv']['education']):
+                    col1, col2, col3 = st.columns([0.85, 0.1, 0.05])
+                    with col1:
+                        st.subheader(f"Education {idx + 1}")
+                    with col2:
+                        if st.button("🗑️", key=f"del_edu_{idx}"):
+                            response['structured_cv']['education'].pop(idx)
+                            st.success("Education entry removed!")
+                            st.rerun()
                     
                     # Make details editable
                     st.markdown("**Details:**")
@@ -218,27 +281,69 @@ def main():
                     edu['details'] = updated_details
                     st.divider()
             
-            with st.expander("Skills", expanded=True):
-                for category, skills in response['structured_cv']['skills'].items():
-                    st.subheader(category)
-                    updated_skills = st.text_area(
-                        f"Skills - {category}",
-                        "\n".join(skills),
-                        height=100,
-                        key=f"skills_{category}"
-                    ).split("\n")
-                    response['structured_cv']['skills'][category] = [
-                        skill.strip() for skill in updated_skills if skill.strip()
-                    ]
-            
-            # Add a button to regenerate the CV text based on edited content
-            if st.button("Update CV"):
-                # Update the CV text based on edited structured content
-                updated_cv = format_cv_from_structure(response['structured_cv'])
-                response['cv'] = updated_cv
-                st.session_state.response = response
-                st.success("CV has been updated!")
-                st.markdown(updated_cv)
+            # Skills Section
+            with st.expander("🛠️ Skills", expanded=True):
+                st.markdown("---")
+                col1, col2 = st.columns([5,1])
+                with col1:
+                    st.subheader("Professional Skills")
+                with col2:
+                    new_category = st.text_input("🏷️ New Category Name")
+                    if st.button("➕ Add Category", type="secondary") and new_category:
+                        if new_category not in response['structured_cv']['skills']:
+                            response['structured_cv']['skills'][new_category] = []
+                            st.success(f"✅ Added new category: {new_category}")
+                            st.rerun()
+
+                for category in list(response['structured_cv']['skills'].keys()):
+                    st.markdown(f"### {category}")
+                    col1, col2 = st.columns([8,1])
+                    with col1:
+                        new_skill = st.text_input(
+                            "➕ Add skill",
+                            key=f"new_skill_{category}",
+                            placeholder="Enter new skill and press Add"
+                        )
+                    with col2:
+                        if st.button("🗑️", key=f"del_cat_{category}"):
+                            del response['structured_cv']['skills'][category]
+                            st.success(f"🗑️ Removed category: {category}")
+                            st.rerun()
+                    
+                    if new_skill:
+                        if st.button("Add", key=f"add_skill_{category}"):
+                            if new_skill not in response['structured_cv']['skills'][category]:
+                                response['structured_cv']['skills'][category].append(new_skill)
+                                st.success(f"✅ Added {new_skill} to {category}")
+                                st.rerun()
+
+                    # Display existing skills
+                    for skill_idx, skill in enumerate(response['structured_cv']['skills'][category]):
+                        col1, col2 = st.columns([8,1])
+                        with col1:
+                            edited_skill = st.text_input(
+                                f"Skill {skill_idx + 1}",
+                                skill,
+                                key=f"skill_{category}_{skill_idx}"
+                            )
+                            response['structured_cv']['skills'][category][skill_idx] = edited_skill
+                        with col2:
+                            if st.button("🗑️", key=f"del_skill_{category}_{skill_idx}"):
+                                response['structured_cv']['skills'][category].pop(skill_idx)
+                                st.success("🗑️ Skill removed!")
+                                st.rerun()
+                    st.markdown("---")
+
+                # Update CV Button
+                st.markdown("---")
+                col1, col2 = st.columns([1,8])
+                with col2:
+                    if st.button("🔄 Update CV", type="secondary", use_container_width=True):
+                        updated_cv = format_cv_from_structure(response['structured_cv'])
+                        response['cv'] = updated_cv
+                        st.session_state.response = response
+                        st.success("✨ CV has been updated!")
+                        st.markdown(updated_cv)
 
         with tab3:
             st.markdown("### Cover Letter")
