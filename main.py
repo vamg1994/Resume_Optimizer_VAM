@@ -6,6 +6,8 @@ from assistant_manager import AssistantManager
 from utils import read_markdown_file
 import re
 import html
+from markitdown import MarkItDown
+import tempfile
 
 # Load environment variables
 load_dotenv()
@@ -53,13 +55,53 @@ def main():
 
         # Optional file upload to override default resume
         uploaded_file = st.file_uploader(
-            "Upload your resume.md file (optional)",
-            type=['md'],
-            help="Upload to override the default resume")
+            "Upload your resume (optional)",
+            type=['md', 'pdf', 'txt', 'docx'],
+            help="Upload to override the default resume"
+        )
 
-        if uploaded_file:
-            resume_content = uploaded_file.read().decode()
-            st.success("Custom resume uploaded successfully!")
+        if uploaded_file is not None:
+            try:
+                file_type = uploaded_file.type
+                
+                if file_type == "application/pdf":
+                    # Create a temporary file to save the PDF
+                    with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
+                        tmp_file.write(uploaded_file.getvalue())
+                        pdf_path = tmp_file.name
+                    
+                    try:
+                        # Initialize Markitdown
+                        md = MarkItDown()
+                        # Convert PDF to markdown
+                        result = md.convert(pdf_path)
+                        if result and result.text_content:
+                            resume_content = result.text_content
+                            st.success("PDF successfully converted to text!")
+                        else:
+                            st.error("Could not extract text from PDF.")
+                            resume_content = default_resume_content
+                    finally:
+                        # Clean up temporary file
+                        if os.path.exists(pdf_path):
+                            os.unlink(pdf_path)
+                
+                elif file_type == "text/markdown" or file_type == "text/plain":
+                    resume_content = uploaded_file.getvalue().decode()
+                    st.success("File uploaded successfully!")
+                
+                elif file_type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+                    # Handle DOCX files if needed
+                    st.error("DOCX support coming soon!")
+                    resume_content = default_resume_content
+                
+                else:
+                    st.error(f"Unsupported file type: {file_type}")
+                    resume_content = default_resume_content
+                    
+            except Exception as e:
+                st.error(f"Error processing file: {str(e)}")
+                resume_content = default_resume_content
         else:
             resume_content = default_resume_content
 
@@ -125,18 +167,12 @@ def main():
         response = st.session_state.response
         
         with tab1:
-            st.markdown("### Resume Analysis")
-            # Make analysis editable
-            edited_analysis = st.text_area(
-                "Edit Analysis",
-                response['analysis'],
-                height=400,
-                key="analysis_editor"
-            )
-            if st.button("Update Analysis"):
-                response['analysis'] = edited_analysis
-                st.session_state.response = response
-                st.success("Analysis has been updated!")
+            st.markdown("### 📊 Resume Analysis")
+            
+            # Display full analysis if needed
+            with st.expander("📝 Full Analysis", expanded=False):
+                st.markdown("### Complete Analysis Report")
+                st.markdown(response['analysis'])
 
         with tab2:
             st.title("📄 ATS-Optimized CV")
@@ -261,6 +297,9 @@ def main():
                     col1, col2, col3 = st.columns([0.85, 0.1, 0.05])
                     with col1:
                         st.subheader(f"Education {idx + 1}")
+                        st.markdown(f"**{edu['degree']}**")
+                        st.markdown(f"**{edu['institution']}**")
+                        st.markdown(f"**{edu['dates']}**")
                     with col2:
                         if st.button("🗑️", key=f"del_edu_{idx}"):
                             response['structured_cv']['education'].pop(idx)
@@ -453,7 +492,8 @@ COVER LETTER
                         from export_pdf import generate_resume_pdf
                         success = generate_resume_pdf(
                             response['structured_cv'],
-                            'resume.pdf',
+                            language=language,
+                            output_path='resume.pdf',
                             font_config=font_config,
                             spacing_config=spacing_config
                         )
@@ -492,8 +532,9 @@ COVER LETTER
                     try:
                         from export_docx import generate_resume_docx
                         success = generate_resume_docx(
-                            response['structured_cv'],
-                            'resume.docx',
+                            structured_cv=response['structured_cv'],
+                            language=language,
+                            output_path='resume.docx',
                             config=docx_config
                         )
                         
@@ -555,6 +596,34 @@ def format_cv_from_structure(structured_cv):
         cv_text += "\n"
     
     return cv_text
+
+def process_resume(resume_text):
+    """Process the resume text and return structured data"""
+    try:
+        # Initialize session state for storing response if not exists
+        if 'response' not in st.session_state:
+            st.session_state.response = None
+
+        # Get the assistant
+        assistant = get_assistant()
+        if not assistant:
+            st.error("Could not initialize the assistant. Please check your API key.")
+            return None
+
+        # Process the resume using the assistant
+        response = assistant.process_resume(
+            resume_text=resume_text,
+            job_name=st.session_state.get('job_name', ''),
+            job_description=st.session_state.get('job_description', ''),
+            employer_info=st.session_state.get('employer_info', ''),
+            location=st.session_state.get('location', 'Remote')
+        )
+
+        return response
+
+    except Exception as e:
+        st.error(f"Error processing resume: {str(e)}")
+        return None
 
 if __name__ == "__main__":
     main()

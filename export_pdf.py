@@ -2,11 +2,19 @@ from fpdf import FPDF
 import textwrap
 
 class ResumePDF(FPDF):
-    def __init__(self, font_config=None, spacing_config=None):
+    def __init__(self, language="English", font_config=None, spacing_config=None):
         super().__init__()
         self.set_auto_page_break(auto=True, margin=15)
         self.add_page()
         self.set_margins(left=15, top=15, right=15)
+        
+        # Set headers based on language
+        if language == "English":
+            self.title = "Resume"
+            self.headers = ["Professional Summary", "Work Experience", "Education", "Skills"]
+        else:
+            self.title = "CV"
+            self.headers = ["Resumen Profesional", "Experiencia Laboral", "Educación", "Habilidades"]
 
     def add_header(self, name,spacing=3.5):
         """Add name as header"""
@@ -77,9 +85,12 @@ class ResumePDF(FPDF):
             self.cell(0, spacing, f"{edu['institution']} | {edu['dates']}", ln=True)
             
             self.set_font('Times', '', 10)
-            for detail in edu['details']:
+            #create a wrapped list of details
+            details_text = ', '.join(edu['details'])
+            wrapped_details = textwrap.fill(details_text, width=95)
+            for line in wrapped_details.split('\n'):        
                 self.cell(5, spacing, '-', ln=0)  # Changed bullet to dash
-                self.cell(0, spacing, detail, ln=True)
+                self.cell(0, spacing, line, ln=True)
             self.ln(3)
 
     def add_skills(self, skills,spacing=3.5):
@@ -96,26 +107,26 @@ class ResumePDF(FPDF):
                 self.cell(0, spacing, line, ln=True)
             self.ln(3)
 
-def generate_resume_pdf(structured_cv, output_path='resume.pdf', font_config=None, spacing_config=None):
+def generate_resume_pdf(structured_cv, language="English", output_path='resume.pdf', font_config=None, spacing_config=None):
     """Generate PDF resume from structured CV data with custom configurations"""
     try:
-        # Initialize PDF with configurations
-        pdf = ResumePDF()
+        # Initialize PDF with configurations and language
+        pdf = ResumePDF(language=language)
         
-        # Add content sections
+        # Add content sections with language-specific headers
         pdf.add_header(structured_cv['name'])
         pdf.add_contact_info(structured_cv['contact'])
         
-        pdf.add_section_header('Professional Summary')
+        pdf.add_section_header(pdf.headers[0])
         pdf.add_professional_summary(structured_cv['professional_summary'])
         
-        pdf.add_section_header('Work Experience')
+        pdf.add_section_header(pdf.headers[1])
         pdf.add_work_experience(structured_cv['work_experience'])
         
-        pdf.add_section_header('Education')
+        pdf.add_section_header(pdf.headers[2])
         pdf.add_education(structured_cv['education'])
         
-        pdf.add_section_header('Skills')
+        pdf.add_section_header(pdf.headers[3])
         pdf.add_skills(structured_cv['skills'])
         
         # Save the PDF

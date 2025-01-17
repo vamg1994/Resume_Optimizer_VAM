@@ -2,10 +2,18 @@ from docx import Document
 from docx.shared import Pt, Inches
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
-def generate_resume_docx(structured_cv, output_path='resume.docx', config=None):
+def generate_resume_docx(structured_cv, language="English", output_path='resume.docx', config=None):
     """Generate DOCX resume from structured CV data with custom configurations"""
     try:
         doc = Document()
+        
+        # Set headers based on language
+        if language == "English":
+            title = "Resume"
+            headers = ["Professional Summary", "Work Experience", "Education", "Skills"]
+        else:
+            title = "CV"
+            headers = ["Resumen Profesional", "Experiencia Laboral", "Educación", "Habilidades"]
         
         # Default configuration
         default_config = {
@@ -46,12 +54,12 @@ def generate_resume_docx(structured_cv, output_path='resume.docx', config=None):
             paragraph.paragraph_format.line_spacing = config['line_spacing']
 
         # Add Professional Summary
-        doc.add_heading('Professional Summary', level=1)
+        doc.add_heading(headers[0], level=1)
         summary = doc.add_paragraph()
         summary.add_run(structured_cv['professional_summary']).font.size = Pt(config['body_size'])
 
         # Add Work Experience
-        doc.add_heading('Work Experience', level=1)
+        doc.add_heading(headers[1], level=1)
         for job in structured_cv['work_experience']:
             # Job title
             p = doc.add_paragraph()
@@ -69,7 +77,7 @@ def generate_resume_docx(structured_cv, output_path='resume.docx', config=None):
                 bullet.add_run(resp).font.size = Pt(config['body_size'])
 
         # Add Education
-        doc.add_heading('Education', level=1)
+        doc.add_heading(headers[2], level=1)
         for edu in structured_cv['education']:
             # Degree
             p = doc.add_paragraph()
@@ -82,12 +90,11 @@ def generate_resume_docx(structured_cv, output_path='resume.docx', config=None):
             inst.add_run(f"{edu['institution']} | {edu['dates']}").font.size = Pt(config['body_size'])
             
             # Details
-            for detail in edu['details']:
-                bullet = doc.add_paragraph(style='List Bullet')
-                bullet.add_run(detail).font.size = Pt(config['body_size'])
+            detail_p=doc.add_paragraph()
+            detail_p.add_run(', '.join(edu['details'])).font.size = Pt(config['body_size'])
 
         # Add Skills
-        doc.add_heading('Skills', level=1)
+        doc.add_heading(headers[3], level=1)
         for category, skills in structured_cv['skills'].items():
             # Category
             p = doc.add_paragraph()
