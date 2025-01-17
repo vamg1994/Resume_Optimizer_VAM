@@ -519,13 +519,13 @@ COVER LETTER
                 with st.expander("📘 DOCX Settings"):
                     st.subheader("Font Sizes")
                     docx_config = {
-                        'name_size': st.number_input('Name Size', 12, 36, 24),
-                        'contact_size': st.number_input('Contact Size', 8, 14, 10),
+                        'name_size': st.number_input('Name Size', 12, 36, 14),
+                        'contact_size': st.number_input('Contact Size', 8, 14, 8),
                         'heading_size': st.number_input('Heading Size', 10, 18, 14),
-                        'title_size': st.number_input('Job Title Size', 10, 16, 12),
-                        'body_size': st.number_input('Body Text Size', 8, 14, 11),
+                        'title_size': st.number_input('Job Title Size', 10, 16, 11),
+                        'body_size': st.number_input('Body Text Size', 8, 14, 10),
                         'margins': st.number_input('Margins (inches)', 0.3, 2.0, 0.5, step=0.1),
-                        'line_spacing': st.number_input('Line Spacing', 0.3, 2.0, 1.15, step=0.05) #this means minimum is 0.3, maximum is 2.0, default is 1.15, and step is 0.05
+                        'line_spacing': st.number_input('Line Spacing', 0.75, 2.0, 1.15, step=0.05) #this means minimum is 0.3, maximum is 2.0, default is 1.15, and step is 0.05
                     }
 
                 if st.button("Generate DOCX Resume", use_container_width=True):
