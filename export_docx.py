@@ -17,13 +17,15 @@ def generate_resume_docx(structured_cv, language="English", output_path='resume.
         
         # Default configuration
         default_config = {
-            'name_size': 24,
+            'name_size': 12,
             'contact_size': 10,
-            'heading_size': 14,
+            'heading_size': 12,
             'title_size': 12,
-            'body_size': 11,
+            'body_size': 10,
             'margins': 0.5,
-            'line_spacing': 1.15
+            'line_spacing': 1,
+            'indent': 0.25
+            
         }
         
         # Use provided config or defaults
