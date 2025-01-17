@@ -43,7 +43,7 @@ class ResumePDF(FPDF):
     def add_professional_summary(self, summary,spacing=3.5):
         """Add professional summary section"""
         self.set_font('Times', '', 10)
-        wrapped_text = textwrap.fill(summary, width=95)
+        wrapped_text = textwrap.fill(summary, width=120)
         for line in wrapped_text.split('\n'):
             self.cell(0, spacing, line, ln=True)
         self.ln(5)
@@ -64,7 +64,7 @@ class ResumePDF(FPDF):
             for resp in job['responsibilities']:
                 # Add dash instead of bullet point and indent
                 self.cell(5, spacing, '-', ln=0)
-                wrapped_text = textwrap.fill(resp, width=85)
+                wrapped_text = textwrap.fill(resp, width=120)
                 first_line = True
                 for line in wrapped_text.split('\n'):
                     if first_line:
@@ -87,7 +87,7 @@ class ResumePDF(FPDF):
             self.set_font('Times', '', 10)
             #create a wrapped list of details
             details_text = ', '.join(edu['details'])
-            wrapped_details = textwrap.fill(details_text, width=95)
+            wrapped_details = textwrap.fill(details_text, width=120)
             for line in wrapped_details.split('\n'):        
                 self.cell(5, spacing, '-', ln=0)  # Changed bullet to dash
                 self.cell(0, spacing, line, ln=True)
@@ -102,7 +102,7 @@ class ResumePDF(FPDF):
             self.set_font('Times', '', 8)
             # Create a wrapped list of skills
             skills_text = ', '.join(skill_list)
-            wrapped_skills = textwrap.fill(skills_text, width=95)
+            wrapped_skills = textwrap.fill(skills_text, width=120)
             for line in wrapped_skills.split('\n'):
                 self.cell(0, spacing, line, ln=True)
             self.ln(3)
