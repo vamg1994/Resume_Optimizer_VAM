@@ -2,10 +2,10 @@
 
 ## Contact  
 - **Mail:** [virgiliomadrid1994@gmail.com](mailto:virgiliomadrid1994@gmail.com)  
-- **LinkedIn:** [LinkedIn](https://www.linkedin.com/in/vamadrid/)  
+- **LinkedIn:** [LinkedIn: vamadrid](https://www.linkedin.com/in/vamadrid/)  
 - **Phone:** (504) 0000-00000  
 - **Residence:** Honduras  
-- **GitHub:** [GitHub](https://github.com/vamg1994)  
+- **GitHub:** [GitHub: vamg1994](https://github.com/vamg1994)  
 
 ---
 
