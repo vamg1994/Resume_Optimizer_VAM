@@ -387,7 +387,7 @@ def main():
         with tab3:
             st.markdown("### Cover Letter")
             # Make cover letter editable with sections
-            with st.expander("Edit Cover Letter", expanded=True):
+            with st.expander("PreviewCover Letter", expanded=True):
                 edited_cover_letter = st.text_area(
                     "Edit Cover Letter",
                     response['cover_letter'],

@@ -9,6 +9,9 @@
 
 ---
 
+## Professional Summary  
+Engineer with over 7 years of experience in the manufacturing industry and 3 years of experience in   machine learning and artificial intelligence. Specialized in data analysis, machine learning, and project management. Recently, I built a webapp using Python and Streamlit that leverages sensor data and machine learning algorithms to proactively detect potential equipment failures, demonstrating a strategic approach to reducing operational downtime and enhancing industrial efficiency: (Demo)
+
 ## Work Experience  
 
 ### Maintenance Coordinator  
@@ -17,40 +20,69 @@
 - Implemented cost-saving projects and initiatives, achieving budget savings of over 5% and improving process sustainability through project financial analysis tools, data analysis, and statistical tools to identify opportunities for improvement.  
 - Led a team of over 40 people in the industrial maintenance department (technicians and engineers).  
 - Automated report generation using Python, Excel, and Power BI.  
-- Experienced in industrial maintenance and administration.  
+- Experienced in industrial maintenance and administration.
+- Trained Machine Learning models to predict machines failures and reduce downtime.
+- Built tools with Python to automate tasks and improve efficiency.
 
 ### Maintenance Planner  
 **Employer:** PepsiCo  
 **Dates:** Jun 2020 - Aug 2022  
 - Reduced downtime by over 5% by optimizing maintenance plans using predictive models in Python.  
 - Optimized spare parts inventories using statistical tools and ABC analysis with Excel and SAP, resulting in lower inventory levels while maintaining process reliability.  
-- Experienced in industrial maintenance and administration.  
+- Experienced in industrial maintenance and administration.
+- Defended ISO 9001, ISO 22000, AIB, NSF, HAACP certifications, including the responsability to train the maintenance team and lead the process.
 
 ### Executive Trainee  
 **Employer:** PepsiCo  
 **Dates:** Aug 2017 - Jun 2020  
-- Implemented automation processes in multiple departments, reducing the time spent in report generation by over 90% through Excel VBA, Power BI, and ETL processes.  
+- Automated the report generation for Financial and Operational reports, reducing the time spent in report generation by over 90% through Excel VBA, Power BI, and ETL processes.  
 - Promoted and implemented best practices in data management, facilitating real-time KPI access.  
+- Built an Excel tool for credits department to track the status of the credits and the payments and obtain insights on the credit risk.
 
----
+### Automation and AI Consultant
+**Employer:** VAM / Freelance
+**Dates:** Sep 2024 - Present
+-Automation and AI consulting for small and medium companies. Building tools and automations to improve efficiency and reduce costs. Here are some of the projects I've worked on (pick the 3 that are the most relevant to the job):
 
-## Projects  
+- Failure Prediction for Machines using ML
+This is a webapp that uses a ML model trained to predict machine failure, including data exploration and data visualization, and model training.
+**Skills Used:** Machine Learning, Python, Streamlit, Scikit-learn, Data Engineering, Data Visualization, Manufacturing  
 
-- **Movie Recommendation System:** 
-Skills: Python, Flask, HTML, CSS, JavaScript, Vercel.  
-Description: Recommends movies based on user ratings and similarities in fields such as category, description, country of origin, and cast.   
+- S&P 500 Dashboard with API
+This web app shows the performance of the S&P 500 stocks and allows comparisons.
+**Skills Used:** Python, API Development, Streamlit, Natural Language Processing, Data Visualization, Finance, Machine Learning  
 
-- **SP500 Dashboard with APIs:** 
-Skills: Python, Flask, APIs, HTML, CSS, JavaScript, Vercel.  
-Description: Fetches data from Yahoo Finance on S&P 500 companies and displays it in a dashboard, calculating and showcasing relevant financial metrics for decision-making.  
+- Content Generator for LinkedIn
+Web app that generates content for LinkedIn posts using Python and Streamlit.
+**Skills Used:** Python, Streamlit, LLMs, API, GenAI  
 
-- **Bank Churn Prediction:** 
-Skills: Machine learning project combining data visualization and engineering.  
-Description: Predicts whether a bank customer will churn using trained models.  
+- LLM Benchmark
+Web app to compare responses from different LLMs, vote anonymously, and analyze results.
+**Skills Used:** Python, Streamlit, LLMs, OpenAI API, Database Management (PostgreSQL), Deep Learning, Analytics  
 
-- **Maintenance Failure Prediction:** 
-Skills: Python, Streamlit, Data Exploration, Machine Learning.  
-Description: A Streamlit app allowing dataset exploration, model training, and failure prediction based on parameters like machine type, air temperature, process temperature, tool wear, etc.  
+- Machine Learning Recommendation System
+This is a ML-based movie recommendation system using collaborative filtering.
+**Skills Used:** Machine Learning, Python, Flask, Natural Language Processing  
+
+- Audio2Text
+This is a webapp that converts audio to text using OpenAI Whisper.
+**Skills Used:** Speech-to-Text, Python, Streamlit, OpenAI Whisper  
+
+- Web Scraper
+Scrape tables from websites and download them as CSV files.
+**Skills Used:** Web Scraping, Python, Streamlit, HTTP Requests, Data Processing  
+
+- Resume Optimizer
+This is a webapp that optimizes your resume for job applications using LLM.
+**Skills Used:** Python, Streamlit, LLMs, OpenAI API  
+
+- Bank Churn Prediction
+Data engineering, visualization, and ML training to predict bank customer churn.
+**Skills Used:** Machine Learning, Python, Data Engineering, Data Visualization, Financial Analysis  
+
+- Automated Content Creation - Make
+Automation to generate LinkedIn carousel posts by filling a Tally form.
+**Skills Used:** Robotic Process Automation (RPA), Make/Integromat, Regex, Webhooks, API Integration, LLMs, OpenAI API  
 
 ---
 
@@ -90,7 +122,7 @@ Description: A Streamlit app allowing dataset exploration, model training, and f
 - HubSpot, Airtable  
 
 **Communication:**  
-- Microsoft Outlook, Gmail, Microsoft Teams, Zoom  
+- Microsoft Outlook, Gmail, Microsoft Teams, Zoom, Slack
 
 **Task/Project Management:**  
 - Notion, MS Planner, Microsoft Teams, Trello, MS Project  
@@ -102,13 +134,13 @@ Description: A Streamlit app allowing dataset exploration, model training, and f
 - Python, SQL, Machine Learning, MLflow  
 
 **Artificial Intelligence:**  
-- NLP, Computer Vision, TensorFlow  
-
-**Productivity Tools:**  
-- ChatGPT, Gemini, Perplexity, Cursor, V0, Replit  
+- NLP, Computer Vision, TensorFlow, ChatGPT, Gemini, Perplexity, Cursor, V0, Replit  
 
 **Report Generation:**  
 - Power BI, Tableau, Looker, Python (Matplotlib, Plotly, Seaborn, Dash)
 
 **Frontend:**  
-- HTML, CSS, JavaScript, Vercel, Flask, Streamlit  
+- HTML, CSS, JavaScript, Flask, Streamlit  
+
+**Deployment:**  
+- Vercel, Streamlit, Flask  
