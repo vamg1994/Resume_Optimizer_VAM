@@ -4,23 +4,48 @@ import time
 import re
 import json
 import streamlit as st
+import logging
 
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class AssistantManager:
+    MAX_RETRIES = 3
+    RETRY_DELAY = 2  # seconds
 
     def __init__(self):
-        self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-        try:
-            self.assistant = self.client.beta.assistants.retrieve(os.getenv("agent_id"))
-        except Exception as e:
-            raise Exception(f"Failed to retrieve assistant: {str(e)}")
+        """Initialize the AssistantManager with retry logic"""
+        self.client = None
+        self.assistant = None
+        self._initialize_with_retry()
+
+    def _initialize_with_retry(self):
+        """Initialize the OpenAI client and retrieve the assistant with retry logic"""
+        for attempt in range(self.MAX_RETRIES):
+            try:
+                # Initialize OpenAI client
+                self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+                
+                # Retrieve the assistant
+                agent_id = os.getenv("agent_id")
+                if not agent_id:
+                    raise ValueError("agent_id not found in environment variables")
+                
+                self.assistant = self.client.beta.assistants.retrieve(agent_id)
+                logger.info(f"Successfully initialized AssistantManager with assistant: {self.assistant.id}")
+                return
+                
+            except Exception as e:
+                logger.error(f"Attempt {attempt + 1} failed: {str(e)}")
+                if attempt < self.MAX_RETRIES - 1:
+                    logger.info(f"Retrying in {self.RETRY_DELAY} seconds...")
+                    time.sleep(self.RETRY_DELAY)
+                else:
+                    raise Exception(f"Failed to initialize AssistantManager after {self.MAX_RETRIES} attempts: {str(e)}")
 
     def generate_resume_package(self, input_data):
         """Generate the resume package using the assistant"""
-        import logging
-        logging.basicConfig(level=logging.INFO)
-        logger = logging.getLogger(__name__)
-
         try:
             # Create a thread
             thread = self.client.beta.threads.create()

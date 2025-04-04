@@ -8,6 +8,11 @@ import re
 import html
 from markitdown import MarkItDown
 import tempfile
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Load environment variables
 load_dotenv()
@@ -15,10 +20,26 @@ load_dotenv()
 # Initialize AssistantManager
 @st.cache_resource
 def get_assistant():
-    if not os.getenv("OPENAI_API_KEY"):
-        st.error("OpenAI API key not found in environment variables")
+    """Initialize and return the AssistantManager with error handling"""
+    try:
+        # Check for required environment variables
+        if not os.getenv("OPENAI_API_KEY"):
+            st.error("OpenAI API key not found in environment variables")
+            return None
+            
+        if not os.getenv("agent_id"):
+            st.error("Assistant ID not found in environment variables")
+            return None
+            
+        # Initialize the assistant
+        assistant = AssistantManager()
+        logger.info("AssistantManager initialized successfully")
+        return assistant
+        
+    except Exception as e:
+        logger.error(f"Failed to initialize AssistantManager: {str(e)}")
+        st.error(f"Failed to initialize the resume assistant. Please try again later. Error: {str(e)}")
         return None
-    return AssistantManager()
 
 # Page configuration
 st.set_page_config(
@@ -35,11 +56,13 @@ st.set_page_config(
 st.set_option('client.showErrorDetails', True)
 
 def main():
-    
     st.title("VAM Resume Optimizer")
 
     # Initialize the assistant
     assistant = get_assistant()
+    if assistant is None:
+        st.error("Unable to initialize the resume assistant. Please check your environment variables and try again.")
+        return
 
     # Move all input elements to sidebar
     with st.sidebar:

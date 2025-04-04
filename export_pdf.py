@@ -1,4 +1,5 @@
 from fpdf import FPDF
+from fpdf.enums import XPos, YPos
 import textwrap
 
 class ResumePDF(FPDF):
@@ -16,10 +17,10 @@ class ResumePDF(FPDF):
             self.title = "CV"
             self.headers = ["Resumen Profesional", "Experiencia Laboral", "Educación", "Habilidades"]
 
-    def add_header(self, name,spacing=3.5):
+    def add_header(self, name, spacing=3.5):
         """Add name as header"""
         self.set_font('Times', 'B', 14)
-        self.cell(0, spacing, name, ln=True, align='C')
+        self.cell(0, spacing, name, new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='C')
         self.ln(5)
 
     def add_contact_info(self, contact_info):
@@ -30,81 +31,81 @@ class ResumePDF(FPDF):
         # Wrap the contact line if it's too long
         wrapped_contact = textwrap.fill(contact_line, width=120)
         for line in wrapped_contact.split('\n'):
-            self.cell(0, 5, line, ln=True, align='C')
+            self.cell(0, 5, line, new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='C')
         self.ln(5)
 
-    def add_section_header(self, title,spacing=3.5):
+    def add_section_header(self, title, spacing=3.5):
         """Add section header with line"""
         self.set_font('Times', 'B', 10)
-        self.cell(0, spacing, title, ln=True)
+        self.cell(0, spacing, title, new_x=XPos.LMARGIN, new_y=YPos.NEXT)
         self.line(15, self.get_y(), 195, self.get_y())
         self.ln(5)
 
-    def add_professional_summary(self, summary,spacing=3.5):
+    def add_professional_summary(self, summary, spacing=3.5):
         """Add professional summary section"""
         self.set_font('Times', '', 10)
         wrapped_text = textwrap.fill(summary, width=120)
         for line in wrapped_text.split('\n'):
-            self.cell(0, spacing, line, ln=True)
+            self.cell(0, spacing, line, new_x=XPos.LMARGIN, new_y=YPos.NEXT)
         self.ln(5)
 
-    def add_work_experience(self, experience,spacing=3.5):
+    def add_work_experience(self, experience, spacing=3.5):
         """Add work experience section"""
         for job in experience:
             # Job title and company
             self.set_font('Times', 'B', 10)
-            self.cell(0, spacing, f"{job['title']}", ln=True)
+            self.cell(0, spacing, f"{job['title']}", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
             
             # Company and dates
             self.set_font('Times', '', 10)
-            self.cell(0, spacing, f"{job['company']} | {job['dates']}", ln=True)
+            self.cell(0, spacing, f"{job['company']} | {job['dates']}", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
             
             # Responsibilities
             self.set_font('Times', '', 10)
             for resp in job['responsibilities']:
                 # Add dash instead of bullet point and indent
-                self.cell(5, spacing, '-', ln=0)
+                self.cell(5, spacing, '-', new_x=XPos.RIGHT)
                 wrapped_text = textwrap.fill(resp, width=120)
                 first_line = True
                 for line in wrapped_text.split('\n'):
                     if first_line:
-                        self.cell(0, spacing, line, ln=True)
+                        self.cell(0, spacing, line, new_x=XPos.LMARGIN, new_y=YPos.NEXT)
                         first_line = False
                     else:
-                        self.cell(5, spacing, '', ln=0)  # Indent
-                        self.cell(0, spacing, line, ln=True)
+                        self.cell(5, spacing, '', new_x=XPos.RIGHT)  # Indent
+                        self.cell(0, spacing, line, new_x=XPos.LMARGIN, new_y=YPos.NEXT)
             self.ln(3)
 
-    def add_education(self, education,spacing=3.5):
+    def add_education(self, education, spacing=3.5):
         """Add education section"""
         for edu in education:
             self.set_font('Times', 'B', 10)
-            self.cell(0, spacing, f"{edu['degree']}", ln=True)
+            self.cell(0, spacing, f"{edu['degree']}", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
             
             self.set_font('Times', '', 10)
-            self.cell(0, spacing, f"{edu['institution']} | {edu['dates']}", ln=True)
+            self.cell(0, spacing, f"{edu['institution']} | {edu['dates']}", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
             
             self.set_font('Times', '', 10)
             #create a wrapped list of details
             details_text = ', '.join(edu['details'])
             wrapped_details = textwrap.fill(details_text, width=120)
             for line in wrapped_details.split('\n'):        
-                self.cell(5, spacing, '-', ln=0)  # Changed bullet to dash
-                self.cell(0, spacing, line, ln=True)
+                self.cell(5, spacing, '-', new_x=XPos.RIGHT)  # Changed bullet to dash
+                self.cell(0, spacing, line, new_x=XPos.LMARGIN, new_y=YPos.NEXT)
             self.ln(3)
 
-    def add_skills(self, skills,spacing=3.5):
+    def add_skills(self, skills, spacing=3.5):
         """Add skills section"""
         for category, skill_list in skills.items():
             self.set_font('Times', 'B', 10)
-            self.cell(0, spacing, category, ln=True)
+            self.cell(0, spacing, category, new_x=XPos.LMARGIN, new_y=YPos.NEXT)
             
             self.set_font('Times', '', 8)
             # Create a wrapped list of skills
             skills_text = ', '.join(skill_list)
             wrapped_skills = textwrap.fill(skills_text, width=120)
             for line in wrapped_skills.split('\n'):
-                self.cell(0, spacing, line, ln=True)
+                self.cell(0, spacing, line, new_x=XPos.LMARGIN, new_y=YPos.NEXT)
             self.ln(3)
 
 def generate_resume_pdf(structured_cv, language="English", output_path='resume.pdf', font_config=None, spacing_config=None):
